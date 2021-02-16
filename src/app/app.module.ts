@@ -12,14 +12,22 @@ import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {
-  NbChatModule,
-  NbDatepickerModule,
-  NbDialogModule,
   NbMenuModule,
-  NbSidebarModule,
+  NbChatModule,
   NbToastrModule,
   NbWindowModule,
+  NbDialogModule,
+  NbSidebarModule,
+  NbDatepickerModule,
 } from '@nebular/theme';
+
+import { NbAuthModule } from '@nebular/auth';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { NbFirebaseAuthModule } from '@nebular/firebase-auth';
+import { AuthGuard, RoleGuard } from './auth/auth-gard.service';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,19 +36,25 @@ import {
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    NbSidebarModule.forRoot(),
+    
+    NbAuthModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
+    NbFirebaseAuthModule,
+
+    CoreModule.forRoot(),
+    ThemeModule.forRoot(),
     NbMenuModule.forRoot(),
-    NbDatepickerModule.forRoot(),
+    NbChatModule.forRoot(),
     NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
-    NbChatModule.forRoot({
-      messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
-    }),
-    CoreModule.forRoot(),
-    ThemeModule.forRoot(),
+    NbSidebarModule.forRoot(),
+    NbDatepickerModule.forRoot(),
   ],
+  providers: [AuthGuard, RoleGuard],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+
+export class AppModule {}
